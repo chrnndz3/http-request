@@ -99,10 +99,11 @@ public class HttpRequestTest extends ServerTestCase {
    * Set up server
    *
    * @throws Exception
+   * @return
    */
-  @BeforeClass
-  public static void startServer() throws Exception {
-    url = setUp(new RequestHandler() {
+/*  @BeforeClass
+  public static java.lang.String startServer() throws Exception {
+    *//*url = setUp(new RequestHandler() {
 
       @Override
       public void handle(String target, Request baseRequest,
@@ -117,7 +118,29 @@ public class HttpRequestTest extends ServerTestCase {
         if (handler != null)
           handler.handle(request, response);
       }
+    });*//*
+    return null;
+  }*/
+
+  public String startServer() throws Exception {
+    String url = setUp(new RequestHandler() {
+
+      @Override
+      public void handle(String target, Request baseRequest,
+                         HttpServletRequest request, HttpServletResponse response)
+              throws IOException, ServletException {
+        if (handler != null)
+          handler.handle(target, baseRequest, request, response);
+      }
+
+      @Override
+      public void handle(Request request, HttpServletResponse response) {
+        if (handler != null)
+          handler.handle(request, response);
+      }
     });
+
+    return url;
   }
 
   /**
@@ -128,17 +151,17 @@ public class HttpRequestTest extends ServerTestCase {
     handler = null;
   }
 
-  /**
+/*  *//**
    * Create request with malformed URL
-   */
+   *//*
   @Test(expected = HttpRequestException.class)
   public void malformedStringUrl() {
     get("\\m/");
   }
 
-  /**
+  *//**
    * Create request with malformed URL
-   */
+   *//*
   @Test
   public void malformedStringUrlCause() {
     try {
@@ -149,21 +172,22 @@ public class HttpRequestTest extends ServerTestCase {
     }
   }
 
-  /**
+  *//**
    * Set request buffer size to negative value
-   */
+   *//*
   @Test(expected = IllegalArgumentException.class)
   public void negativeBufferSize() {
     get("http://localhost").bufferSize(-1);
   }
 
-  /**
+  *//**
    * Make a GET request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getEmpty() throws Exception {
+
     final AtomicReference<String> method = new AtomicReference<String>();
     handler = new RequestHandler() {
 
@@ -173,6 +197,8 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+
+    String url = startServer();
     HttpRequest request = get(url);
     assertNotNull(request.getConnection());
     assertEquals(30000, request.readTimeout(30000).getConnection()
@@ -201,11 +227,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("GET", request.method());
   }
 
-  /**
+  *//**
    * Make a GET request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getUrlEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -232,11 +258,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make a GET request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getNoContent() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -263,11 +289,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make a GET request with a URL that needs encoding
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getUrlEncodedWithSpace() throws Exception {
     String unencoded = "/a resource";
@@ -285,11 +311,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(unencoded, path.get());
   }
 
-  /**
+  *//**
    * Make a GET request with a URL that needs encoding
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getUrlEncodedWithUnicode() throws Exception {
     String unencoded = "/\u00DF";
@@ -307,11 +333,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(unencoded, path.get());
   }
 
-  /**
+  *//**
    * Make a GET request with a URL that needs encoding
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getUrlEncodedWithPercent() throws Exception {
     String unencoded = "/%";
@@ -329,11 +355,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(unencoded, path.get());
   }
 
-  /**
+  *//**
    * Make a DELETE request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void deleteEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -354,11 +380,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("DELETE", request.method());
   }
 
-  /**
+  *//**
    * Make a DELETE request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void deleteUrlEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -378,11 +404,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make an OPTIONS request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void optionsEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -402,11 +428,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make an OPTIONS request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void optionsUrlEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -426,11 +452,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make a HEAD request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void headEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -450,11 +476,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make a HEAD request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void headUrlEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -474,11 +500,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make a PUT request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void putEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -490,6 +516,7 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+    String url = startServer();
     HttpRequest request = put(url);
     assertNotNull(request.getConnection());
     assertTrue(request.ok());
@@ -498,11 +525,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make a PUT request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void putUrlEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -522,11 +549,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make a PUT request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void traceEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -546,11 +573,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make a TRACE request with an empty body response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void traceUrlEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -570,11 +597,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Make a POST request with an empty request body
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -594,11 +621,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(HTTP_CREATED, code);
   }
 
-  /**
+  *//**
    * Make a POST request with an empty request body
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postUrlEmpty() throws Exception {
     final AtomicReference<String> method = new AtomicReference<String>();
@@ -618,11 +645,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(HTTP_CREATED, code);
   }
 
-  /**
+  *//**
    * Make a POST request with a non-empty request body
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postNonEmptyString() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -639,11 +666,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello", body.get());
   }
 
-  /**
+  *//**
    * Make a POST request with a non-empty request body
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postNonEmptyFile() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -662,11 +689,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello", body.get());
   }
 
-  /**
+  *//**
    * Make a POST request with multiple files in the body
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postMultipleFiles() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -690,11 +717,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello world", body.get());
   }
 
-  /**
+  *//**
    * Make a POST request with a non-empty request body
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postNonEmptyReader() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -713,11 +740,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello", body.get());
   }
 
-  /**
+  *//**
    * Make a POST request with a non-empty request body
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postNonEmptyByteArray() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -736,11 +763,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello", body.get());
   }
 
-  /**
+  *//**
    * Make a post with an explicit set of the content length
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postWithLength() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -762,11 +789,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(data, body.get());
   }
 
-  /**
+  *//**
    * Make a post of form data
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postForm() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -790,11 +817,11 @@ public class HttpRequestTest extends ServerTestCase {
         contentType.get());
   }
 
-  /**
+  *//**
    * Make a post of form data
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postFormWithNoCharset() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -817,11 +844,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("application/x-www-form-urlencoded", contentType.get());
   }
 
-  /**
+  *//**
    * Make a post with an empty form data map
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postEmptyForm() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -838,11 +865,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", body.get());
   }
 
-  /**
+  *//**
    * Make a post in chunked mode
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void chunkPost() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -863,11 +890,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("chunked", encoding.get());
   }
 
-  /**
+  *//**
    * Make a GET request for a non-empty response body
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getNonEmptyString() throws Exception {
     handler = new RequestHandler() {
@@ -885,11 +912,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertFalse(request.isBodyEmpty());
   }
 
-  /**
+  *//**
    * Make a GET request with a response that includes a charset parameter
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getWithResponseCharset() throws Exception {
     handler = new RequestHandler() {
@@ -905,11 +932,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(CHARSET_UTF8, request.charset());
   }
 
-  /**
+  *//**
    * Make a GET request with a response that includes a charset parameter
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getWithResponseCharsetAsSecondParam() throws Exception {
     handler = new RequestHandler() {
@@ -925,11 +952,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(CHARSET_UTF8, request.charset());
   }
 
-  /**
+  *//**
    * Make a GET request with basic authentication specified
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void basicAuthentication() throws Exception {
     final AtomicReference<String> user = new AtomicReference<String>();
@@ -956,11 +983,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("p4ssw0rd", password.get());
   }
 
-  /**
+  *//**
    * Make a GET request with basic proxy authentication specified
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void basicProxyAuthentication() throws Exception {
     final AtomicBoolean finalHostReached = new AtomicBoolean(false);
@@ -979,11 +1006,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(1, proxyHitCount.get());
   }
 
-  /**
+  *//**
    * Make a GET and get response as a input stream reader
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getReader() throws Exception {
     handler = new RequestHandler() {
@@ -1001,11 +1028,11 @@ public class HttpRequestTest extends ServerTestCase {
     reader.close();
   }
 
-  /**
+  *//**
    * Make a POST and send request using a writer
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void sendWithWriter() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -1024,11 +1051,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello", body.get());
   }
 
-  /**
+  *//**
    * Make a GET and get response as a buffered reader
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getBufferedReader() throws Exception {
     handler = new RequestHandler() {
@@ -1046,11 +1073,11 @@ public class HttpRequestTest extends ServerTestCase {
     reader.close();
   }
 
-  /**
+  *//**
    * Make a GET and get response as a input stream reader
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getReaderWithCharset() throws Exception {
     handler = new RequestHandler() {
@@ -1068,11 +1095,11 @@ public class HttpRequestTest extends ServerTestCase {
     reader.close();
   }
 
-  /**
+  *//**
    * Make a GET and get response body as byte array
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getBytes() throws Exception {
     handler = new RequestHandler() {
@@ -1088,11 +1115,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(Arrays.equals("hello".getBytes(), request.bytes()));
   }
 
-  /**
+  *//**
    * Make a GET request that returns an error string
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getError() throws Exception {
     handler = new RequestHandler() {
@@ -1108,11 +1135,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("error", request.body());
   }
 
-  /**
+  *//**
    * Make a GET request that returns an empty error string
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void noError() throws Exception {
     handler = new RequestHandler() {
@@ -1127,11 +1154,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", request.body());
   }
 
-  /**
+  *//**
    * Verify 'Server' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void serverHeader() throws Exception {
     handler = new RequestHandler() {
@@ -1145,11 +1172,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("aserver", get(url).server());
   }
 
-  /**
+  *//**
    * Verify 'Expires' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void expiresHeader() throws Exception {
     handler = new RequestHandler() {
@@ -1163,11 +1190,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(1234000, get(url).expires());
   }
 
-  /**
+  *//**
    * Verify 'Last-Modified' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void lastModifiedHeader() throws Exception {
     handler = new RequestHandler() {
@@ -1181,11 +1208,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(555000, get(url).lastModified());
   }
 
-  /**
+  *//**
    * Verify 'Date' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void dateHeader() throws Exception {
     handler = new RequestHandler() {
@@ -1199,11 +1226,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(66000, get(url).date());
   }
 
-  /**
+  *//**
    * Verify 'ETag' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void eTagHeader() throws Exception {
     handler = new RequestHandler() {
@@ -1217,11 +1244,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("abcd", get(url).eTag());
   }
 
-  /**
+  *//**
    * Verify 'Location' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void locationHeader() throws Exception {
     handler = new RequestHandler() {
@@ -1235,11 +1262,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("http://nowhere", get(url).location());
   }
 
-  /**
+  *//**
    * Verify 'Content-Encoding' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void contentEncodingHeader() throws Exception {
     handler = new RequestHandler() {
@@ -1253,11 +1280,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("gzip", get(url).contentEncoding());
   }
 
-  /**
+  *//**
    * Verify 'Content-Type' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void contentTypeHeader() throws Exception {
     handler = new RequestHandler() {
@@ -1271,11 +1298,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("text/html", get(url).contentType());
   }
 
-  /**
+  *//**
    * Verify 'Content-Type' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void requestContentType() throws Exception {
     final AtomicReference<String> contentType = new AtomicReference<String>();
@@ -1291,11 +1318,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("text/html; charset=UTF-8", contentType.get());
   }
 
-  /**
+  *//**
    * Verify 'Content-Type' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void requestContentTypeNullCharset() throws Exception {
     final AtomicReference<String> contentType = new AtomicReference<String>();
@@ -1311,11 +1338,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("text/html", contentType.get());
   }
 
-  /**
+  *//**
    * Verify 'Content-Type' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void requestContentTypeEmptyCharset() throws Exception {
     final AtomicReference<String> contentType = new AtomicReference<String>();
@@ -1331,11 +1358,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("text/html", contentType.get());
   }
 
-  /**
+  *//**
    * Verify 'Cache-Control' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void cacheControlHeader() throws Exception {
     handler = new RequestHandler() {
@@ -1349,11 +1376,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("no-cache", get(url).cacheControl());
   }
 
-  /**
+  *//**
    * Verify setting headers
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void headers() throws Exception {
     final AtomicReference<String> h1 = new AtomicReference<String>();
@@ -1375,11 +1402,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("v2", h2.get());
   }
 
-  /**
+  *//**
    * Verify setting headers
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void emptyHeaders() throws Exception {
     handler = new RequestHandler() {
@@ -1392,11 +1419,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(get(url).headers(Collections.<String, String> emptyMap()).ok());
   }
 
-  /**
+  *//**
    * Verify getting all headers
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getAllHeaders() throws Exception {
     handler = new RequestHandler() {
@@ -1415,11 +1442,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(headers.get("b").get(0).equals("b"));
   }
 
-  /**
+  *//**
    * Verify setting number header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void numberHeader() throws Exception {
     final AtomicReference<String> h1 = new AtomicReference<String>();
@@ -1438,11 +1465,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", h2.get());
   }
 
-  /**
+  *//**
    * Verify 'User-Agent' request header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void userAgentHeader() throws Exception {
     final AtomicReference<String> header = new AtomicReference<String>();
@@ -1458,11 +1485,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("browser 1.0", header.get());
   }
 
-  /**
+  *//**
    * Verify 'Accept' request header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void acceptHeader() throws Exception {
     final AtomicReference<String> header = new AtomicReference<String>();
@@ -1478,12 +1505,12 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("application/json", header.get());
   }
 
-  /**
+  *//**
    * Verify 'Accept' request header when calling
    * {@link HttpRequest#acceptJson()}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void acceptJson() throws Exception {
     final AtomicReference<String> header = new AtomicReference<String>();
@@ -1499,11 +1526,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("application/json", header.get());
   }
 
-  /**
+  *//**
    * Verify 'If-None-Match' request header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void ifNoneMatchHeader() throws Exception {
     final AtomicReference<String> header = new AtomicReference<String>();
@@ -1519,11 +1546,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("eid", header.get());
   }
 
-  /**
+  *//**
    * Verify 'Accept-Charset' request header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void acceptCharsetHeader() throws Exception {
     final AtomicReference<String> header = new AtomicReference<String>();
@@ -1539,11 +1566,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(CHARSET_UTF8, header.get());
   }
 
-  /**
+  *//**
    * Verify 'Accept-Encoding' request header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void acceptEncodingHeader() throws Exception {
     final AtomicReference<String> header = new AtomicReference<String>();
@@ -1559,11 +1586,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("compress", header.get());
   }
 
-  /**
+  *//**
    * Verify 'If-Modified-Since' request header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void ifModifiedSinceHeader() throws Exception {
     final AtomicLong header = new AtomicLong();
@@ -1579,11 +1606,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(5000, header.get());
   }
 
-  /**
+  *//**
    * Verify 'Referer' header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void refererHeader() throws Exception {
     final AtomicReference<String> referer = new AtomicReference<String>();
@@ -1599,11 +1626,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("http://heroku.com", referer.get());
   }
 
-  /**
+  *//**
    * Verify multipart with file, stream, number, and string parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postMultipart() throws Exception {
     final StringBuilder body = new StringBuilder();
@@ -1640,11 +1667,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(body.toString().contains(Long.toString(file.length()) + "\r\n"));
   }
 
-  /**
+  *//**
    * Verify multipart with content type part header
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postMultipartWithContentType() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -1663,11 +1690,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(body.toString().contains("contents\r\n"));
   }
 
-  /**
+  *//**
    * Verify response in {@link Appendable}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void receiveAppendable() throws Exception {
     final StringBuilder body = new StringBuilder();
@@ -1687,11 +1714,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("content", body.toString());
   }
 
-  /**
+  *//**
    * Verify response in {@link Writer}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void receiveWriter() throws Exception {
     handler = new RequestHandler() {
@@ -1711,11 +1738,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("content", writer.toString());
   }
 
-  /**
+  *//**
    * Verify response via a {@link PrintStream}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void receivePrintStream() throws Exception {
     handler = new RequestHandler() {
@@ -1737,11 +1764,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("content", output.toString(CHARSET_UTF8));
   }
 
-  /**
+  *//**
    * Verify response in {@link File}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void receiveFile() throws Exception {
     handler = new RequestHandler() {
@@ -1767,29 +1794,29 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("content", buffer.toString());
   }
 
-  /**
+  *//**
    * Verify certificate and host helpers on HTTPS connection
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void httpsTrust() throws Exception {
     assertNotNull(get("https://localhost").trustAllCerts().trustAllHosts());
   }
 
-  /**
+  *//**
    * Verify certificate and host helpers ignore non-HTTPS connection
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void httpTrust() throws Exception {
     assertNotNull(get("http://localhost").trustAllCerts().trustAllHosts());
   }
 
-  /**
+  *//**
    * Verify hostname verifier is set and accepts all
-   */
+   *//*
   @Test
   public void verifierAccepts() {
     HttpRequest request = get("https://localhost");
@@ -1800,9 +1827,9 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(connection.getHostnameVerifier().verify(null, null));
   }
 
-  /**
+  *//**
    * Verify single hostname verifier is created across all calls
-   */
+   *//*
   @Test
   public void singleVerifier() {
     HttpRequest request1 = get("https://localhost").trustAllHosts();
@@ -1816,9 +1843,9 @@ public class HttpRequestTest extends ServerTestCase {
         ((HttpsURLConnection) request2.getConnection()).getHostnameVerifier());
   }
 
-  /**
+  *//**
    * Verify single SSL socket factory is created across all calls
-   */
+   *//*
   @Test
   public void singleSslSocketFactory() {
     HttpRequest request1 = get("https://localhost").trustAllCerts();
@@ -1832,11 +1859,11 @@ public class HttpRequestTest extends ServerTestCase {
         ((HttpsURLConnection) request2.getConnection()).getSSLSocketFactory());
   }
 
-  /**
+  *//**
    * Send a stream that throws an exception when read from
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void sendErrorReadStream() throws Exception {
     handler = new RequestHandler() {
@@ -1871,11 +1898,11 @@ public class HttpRequestTest extends ServerTestCase {
     }
   }
 
-  /**
+  *//**
    * Send a stream that throws an exception when read from
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void sendErrorCloseStream() throws Exception {
     handler = new RequestHandler() {
@@ -1909,11 +1936,11 @@ public class HttpRequestTest extends ServerTestCase {
     }
   }
 
-  /**
+  *//**
    * Make a GET request and get the code using an {@link AtomicInteger}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getToOutputCode() throws Exception {
     handler = new RequestHandler() {
@@ -1928,11 +1955,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(HTTP_OK, code.get());
   }
 
-  /**
+  *//**
    * Make a GET request and get the body using an {@link AtomicReference}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getToOutputBody() throws Exception {
     handler = new RequestHandler() {
@@ -1952,11 +1979,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello world", body.get());
   }
 
-  /**
+  *//**
    * Make a GET request and get the body using an {@link AtomicReference}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getToOutputBodyWithCharset() throws Exception {
     handler = new RequestHandler() {
@@ -1977,11 +2004,11 @@ public class HttpRequestTest extends ServerTestCase {
   }
 
 
-  /**
+  *//**
    * Make a GET request that should be compressed
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getGzipped() throws Exception {
     handler = new RequestHandler() {
@@ -2017,11 +2044,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello compressed", request.body(CHARSET_UTF8));
   }
 
-  /**
+  *//**
    * Make a GET request that should be compressed but isn't
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getNonGzippedWithUncompressEnabled() throws Exception {
     handler = new RequestHandler() {
@@ -2040,11 +2067,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello not compressed", request.body(CHARSET_UTF8));
   }
 
-  /**
+  *//**
    * Get header with multiple response values
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getHeaders() throws Exception {
     handler = new RequestHandler() {
@@ -2065,11 +2092,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(Arrays.asList(values).contains("2"));
   }
 
-  /**
+  *//**
    * Get header values when not set in response
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getEmptyHeaders() throws Exception {
     handler = new RequestHandler() {
@@ -2086,11 +2113,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(0, values.length);
   }
 
-  /**
+  *//**
    * Get header parameter value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getSingleParameter() throws Exception {
     handler = new RequestHandler() {
@@ -2101,16 +2128,19 @@ public class HttpRequestTest extends ServerTestCase {
         response.setHeader("a", "b;c=d");
       }
     };
+
+    String url = startServer();
     HttpRequest request = get(url);
     assertTrue(request.ok());
     assertEquals("d", request.parameter("a", "c"));
+    request.disconnect();
   }
 
-  /**
+  *//**
    * Get header parameter value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getMultipleParameters() throws Exception {
     handler = new RequestHandler() {
@@ -2127,11 +2157,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("f", request.parameter("a", "e"));
   }
 
-  /**
+  *//**
    * Get header parameter value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getSingleParameterQuoted() throws Exception {
     handler = new RequestHandler() {
@@ -2147,11 +2177,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("d", request.parameter("a", "c"));
   }
 
-  /**
+  *//**
    * Get header parameter value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getMultipleParametersQuoted() throws Exception {
     handler = new RequestHandler() {
@@ -2168,11 +2198,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("f", request.parameter("a", "e"));
   }
 
-  /**
+  *//**
    * Get header parameter value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getMissingParameter() throws Exception {
     handler = new RequestHandler() {
@@ -2188,11 +2218,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertNull(request.parameter("a", "e"));
   }
 
-  /**
+  *//**
    * Get header parameter value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getParameterFromMissingHeader() throws Exception {
     handler = new RequestHandler() {
@@ -2209,11 +2239,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(request.parameters("b").isEmpty());
   }
 
-  /**
+  *//**
    * Get header parameter value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getEmptyParameter() throws Exception {
     handler = new RequestHandler() {
@@ -2230,11 +2260,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(request.parameters("a").isEmpty());
   }
 
-  /**
+  *//**
    * Get header parameter value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getEmptyParameters() throws Exception {
     handler = new RequestHandler() {
@@ -2251,11 +2281,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(request.parameters("a").isEmpty());
   }
 
-  /**
+  *//**
    * Get header parameter values
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getParameters() throws Exception {
     handler = new RequestHandler() {
@@ -2275,11 +2305,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("e", params.get("d"));
   }
 
-  /**
+  *//**
    * Get header parameter values
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getQuotedParameters() throws Exception {
     handler = new RequestHandler() {
@@ -2299,11 +2329,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("e", params.get("d"));
   }
 
-  /**
+  *//**
    * Get header parameter values
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void getMixQuotedParameters() throws Exception {
     handler = new RequestHandler() {
@@ -2323,11 +2353,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("e", params.get("d"));
   }
 
-  /**
+  *//**
    * Verify getting date header with default value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void missingDateHeader() throws Exception {
     handler = new RequestHandler() {
@@ -2340,11 +2370,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(1234L, get(url).dateHeader("missing", 1234L));
   }
 
-  /**
+  *//**
    * Verify getting date header with default value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void malformedDateHeader() throws Exception {
     handler = new RequestHandler() {
@@ -2358,11 +2388,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(1234L, get(url).dateHeader("malformed", 1234L));
   }
 
-  /**
+  *//**
    * Verify getting int header with default value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void missingIntHeader() throws Exception {
     handler = new RequestHandler() {
@@ -2375,11 +2405,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(4321, get(url).intHeader("missing", 4321));
   }
 
-  /**
+  *//**
    * Verify getting int header with default value
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void malformedIntHeader() throws Exception {
     handler = new RequestHandler() {
@@ -2393,11 +2423,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(4321, get(url).intHeader("malformed", 4321));
   }
 
-  /**
+  *//**
    * Verify sending form data as a sequence of {@link Entry} objects
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postFormAsEntries() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -2420,11 +2450,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("name=user&number=100", body.get());
   }
 
-  /**
+  *//**
    * Verify sending form data where entry value is null
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postFormEntryWithNullValue() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -2446,11 +2476,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("name=", body.get());
   }
 
-  /**
+  *//**
    * Verify POST with query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postWithMappedQueryParams() throws Exception {
     Map<String, String> inputParams = new HashMap<String, String>();
@@ -2475,11 +2505,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify POST with query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postWithVaragsQueryParams() throws Exception {
     final Map<String, String> outputParams = new HashMap<String, String>();
@@ -2494,6 +2524,7 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+    String url = startServer();
     HttpRequest request = post(url, false, "name", "user", "number", "100");
     assertTrue(request.ok());
     assertEquals("POST", method.get());
@@ -2501,11 +2532,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify POST with escaped query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postWithEscapedMappedQueryParams() throws Exception {
     Map<String, String> inputParams = new HashMap<String, String>();
@@ -2530,11 +2561,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify POST with escaped query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void postWithEscapedVarargsQueryParams() throws Exception {
     final Map<String, String> outputParams = new HashMap<String, String>();
@@ -2554,7 +2585,7 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("POST", method.get());
     assertEquals("us er", outputParams.get("name"));
     assertEquals("100", outputParams.get("number"));
-  }
+  }*/
 
   /**
    * Verify POST with numeric query parameters
@@ -2578,11 +2609,15 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+
+    String url = startServer();
     HttpRequest request = post(url, inputParams, false);
     assertTrue(request.ok());
     assertEquals("POST", method.get());
     assertEquals("2", outputParams.get("1"));
     assertEquals("4", outputParams.get("3"));
+
+    request.disconnect();
   }
 
   /**
@@ -2607,11 +2642,15 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+
+    String url = startServer();
     HttpRequest request = get(url, inputParams, false);
     assertTrue(request.ok());
     assertEquals("GET", method.get());
     assertEquals("user", outputParams.get("name"));
     assertEquals("100", outputParams.get("number"));
+
+    request.disconnect();
   }
 
   /**
@@ -2633,11 +2672,15 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+
+    String url = startServer();
     HttpRequest request = get(url, false, "name", "user", "number", "100");
     assertTrue(request.ok());
     assertEquals("GET", method.get());
     assertEquals("user", outputParams.get("name"));
     assertEquals("100", outputParams.get("number"));
+
+    request.disconnect();
   }
 
   /**
@@ -2662,11 +2705,14 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+    String url = startServer();
     HttpRequest request = get(url, inputParams, true);
     assertTrue(request.ok());
     assertEquals("GET", method.get());
     assertEquals("us er", outputParams.get("name"));
     assertEquals("100", outputParams.get("number"));
+
+    request.disconnect();
   }
 
   /**
@@ -2688,11 +2734,15 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+
+    String url = startServer();
     HttpRequest request = get(url, true, "name", "us er", "number", "100");
     assertTrue(request.ok());
     assertEquals("GET", method.get());
     assertEquals("us er", outputParams.get("name"));
     assertEquals("100", outputParams.get("number"));
+
+    request.disconnect();
   }
 
   /**
@@ -2717,11 +2767,15 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+
+    String url = startServer();
     HttpRequest request = delete(url, inputParams, false);
     assertTrue(request.ok());
     assertEquals("DELETE", method.get());
     assertEquals("user", outputParams.get("name"));
     assertEquals("100", outputParams.get("number"));
+
+    request.disconnect();
   }
 
   /**
@@ -2743,18 +2797,22 @@ public class HttpRequestTest extends ServerTestCase {
         response.setStatus(HTTP_OK);
       }
     };
+
+    String url = startServer();
     HttpRequest request = delete(url, false, "name", "user", "number", "100");
     assertTrue(request.ok());
     assertEquals("DELETE", method.get());
     assertEquals("user", outputParams.get("name"));
     assertEquals("100", outputParams.get("number"));
+
+    request.disconnect();
   }
 
   /**
    * Verify DELETE with escaped query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void deleteWithEscapedMappedQueryParams() throws Exception {
     Map<String, String> inputParams = new HashMap<String, String>();
@@ -2779,11 +2837,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify DELETE with escaped query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void deleteWithEscapedVarargsQueryParams() throws Exception {
     final Map<String, String> outputParams = new HashMap<String, String>();
@@ -2805,11 +2863,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify PUT with query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void putWithMappedQueryParams() throws Exception {
     Map<String, String> inputParams = new HashMap<String, String>();
@@ -2834,11 +2892,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify PUT with query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void putWithVarargsQueryParams() throws Exception {
     final Map<String, String> outputParams = new HashMap<String, String>();
@@ -2860,11 +2918,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify PUT with escaped query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void putWithEscapedMappedQueryParams() throws Exception {
     Map<String, String> inputParams = new HashMap<String, String>();
@@ -2889,11 +2947,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify PUT with escaped query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void putWithEscapedVarargsQueryParams() throws Exception {
     final Map<String, String> outputParams = new HashMap<String, String>();
@@ -2915,11 +2973,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify HEAD with query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void headWithMappedQueryParams() throws Exception {
     Map<String, String> inputParams = new HashMap<String, String>();
@@ -2944,11 +3002,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify HEAD with query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void headWithVaragsQueryParams() throws Exception {
     final Map<String, String> outputParams = new HashMap<String, String>();
@@ -2970,11 +3028,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify HEAD with escaped query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void headWithEscapedMappedQueryParams() throws Exception {
     Map<String, String> inputParams = new HashMap<String, String>();
@@ -2999,11 +3057,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Verify HEAD with escaped query parameters
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void headWithEscapedVarargsQueryParams() throws Exception {
     final Map<String, String> outputParams = new HashMap<String, String>();
@@ -3025,11 +3083,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("100", outputParams.get("number"));
   }
 
-  /**
+  *//**
    * Append with base URL with no path
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendMappedQueryParamsWithNoPath() throws Exception {
     assertEquals(
@@ -3038,22 +3096,22 @@ public class HttpRequestTest extends ServerTestCase {
             Collections.singletonMap("a", "b")));
   }
 
-  /**
+  *//**
    * Append with base URL with no path
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendVarargsQueryParmasWithNoPath() throws Exception {
     assertEquals("http://test.com/?a=b",
         HttpRequest.append("http://test.com", "a", "b"));
   }
 
-  /**
+  *//**
    * Append with base URL with path
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendMappedQueryParamsWithPath() throws Exception {
     assertEquals(
@@ -3066,11 +3124,11 @@ public class HttpRequestTest extends ServerTestCase {
             Collections.singletonMap("a", "b")));
   }
 
-  /**
+  *//**
    * Append with base URL with path
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendVarargsQueryParamsWithPath() throws Exception {
     assertEquals("http://test.com/segment1?a=b",
@@ -3079,11 +3137,11 @@ public class HttpRequestTest extends ServerTestCase {
         HttpRequest.append("http://test.com/", "a", "b"));
   }
 
-  /**
+  *//**
    * Append multiple params
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendMultipleMappedQueryParams() throws Exception {
     Map<String, Object> params = new LinkedHashMap<String, Object>();
@@ -3093,44 +3151,44 @@ public class HttpRequestTest extends ServerTestCase {
         HttpRequest.append("http://test.com/1", params));
   }
 
-  /**
+  *//**
    * Append multiple params
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendMultipleVarargsQueryParams() throws Exception {
     assertEquals("http://test.com/1?a=b&c=d",
         HttpRequest.append("http://test.com/1", "a", "b", "c", "d"));
   }
 
-  /**
+  *//**
    * Append null params
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendNullMappedQueryParams() throws Exception {
     assertEquals("http://test.com/1",
         HttpRequest.append("http://test.com/1", (Map<?, ?>) null));
   }
 
-  /**
+  *//**
    * Append null params
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendNullVaragsQueryParams() throws Exception {
     assertEquals("http://test.com/1",
         HttpRequest.append("http://test.com/1", (Object[]) null));
   }
 
-  /**
+  *//**
    * Append empty params
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendEmptyMappedQueryParams() throws Exception {
     assertEquals(
@@ -3139,22 +3197,22 @@ public class HttpRequestTest extends ServerTestCase {
             Collections.<String, String> emptyMap()));
   }
 
-  /**
+  *//**
    * Append empty params
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendEmptyVarargsQueryParams() throws Exception {
     assertEquals("http://test.com/1",
         HttpRequest.append("http://test.com/1", new Object[0]));
   }
 
-  /**
+  *//**
    * Append params with null values
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendWithNullMappedQueryParamValues() throws Exception {
     Map<String, Object> params = new LinkedHashMap<String, Object>();
@@ -3164,28 +3222,28 @@ public class HttpRequestTest extends ServerTestCase {
         HttpRequest.append("http://test.com/1", params));
   }
 
-  /**
+  *//**
    * Append params with null values
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendWithNullVaragsQueryParamValues() throws Exception {
     assertEquals("http://test.com/1?a=&b=",
         HttpRequest.append("http://test.com/1", "a", null, "b", null));
   }
 
-  /**
+  *//**
    * Try to append with wrong number of arguments
-   */
+   *//*
   @Test(expected = IllegalArgumentException.class)
   public void appendOddNumberOfParams() {
     HttpRequest.append("http://test.com", "1");
   }
 
-  /**
+  *//**
    * Append with base URL already containing a '?'
-   */
+   *//*
   @Test
   public void appendMappedQueryParamsWithExistingQueryStart() {
     assertEquals(
@@ -3194,18 +3252,18 @@ public class HttpRequestTest extends ServerTestCase {
             Collections.singletonMap("a", "b")));
   }
 
-  /**
+  *//**
    * Append with base URL already containing a '?'
-   */
+   *//*
   @Test
   public void appendVarargsQueryParamsWithExistingQueryStart() {
     assertEquals("http://test.com/1?a=b",
         HttpRequest.append("http://test.com/1?", "a", "b"));
   }
 
-  /**
+  *//**
    * Append with base URL already containing a '?'
-   */
+   *//*
   @Test
   public void appendMappedQueryParamsWithExistingParams() {
     assertEquals(
@@ -3219,9 +3277,9 @@ public class HttpRequestTest extends ServerTestCase {
 
   }
 
-  /**
+  *//**
    * Append with base URL already containing a '?'
-   */
+   *//*
   @Test
   public void appendWithVarargsQueryParamsWithExistingParams() {
     assertEquals("http://test.com/1?a=b&c=d",
@@ -3230,11 +3288,11 @@ public class HttpRequestTest extends ServerTestCase {
         HttpRequest.append("http://test.com/1?a=b&", "c", "d"));
   }
 
-  /**
+  *//**
    * Append array parameter
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendArrayQueryParams() throws Exception {
     assertEquals(
@@ -3260,11 +3318,11 @@ public class HttpRequestTest extends ServerTestCase {
             "a", new int[] { 1, 2 }));
   }
 
-  /**
+  *//**
    * Append list parameter
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void appendListQueryParams() throws Exception {
     assertEquals(
@@ -3290,11 +3348,11 @@ public class HttpRequestTest extends ServerTestCase {
             "a", Arrays.asList(new Integer[] { 1, 2 })));
   }
 
-  /**
+  *//**
    * Get a 500
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void serverErrorCode() throws Exception {
     handler = new RequestHandler() {
@@ -3309,11 +3367,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(request.serverError());
   }
 
-  /**
+  *//**
    * Get a 400
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void badRequestCode() throws Exception {
     handler = new RequestHandler() {
@@ -3328,11 +3386,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(request.badRequest());
   }
 
-  /**
+  *//**
    * Get a 304
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void notModifiedCode() throws Exception {
     handler = new RequestHandler() {
@@ -3347,12 +3405,12 @@ public class HttpRequestTest extends ServerTestCase {
     assertTrue(request.notModified());
   }
 
-  /**
+  *//**
    * Verify data is sent when receiving response without first calling
    * {@link HttpRequest#code()}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void sendReceiveWithoutCode() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -3375,12 +3433,12 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello", body.get());
   }
 
-  /**
+  *//**
    * Verify data is send when receiving response headers without first calling
    * {@link HttpRequest#code()}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void sendHeadersWithoutCode() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -3402,12 +3460,12 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello", body.get());
   }
 
-  /**
+  *//**
    * Verify data is send when receiving response date header without first
    * calling {@link HttpRequest#code()}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void sendDateHeaderWithoutCode() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -3426,12 +3484,12 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello", body.get());
   }
 
-  /**
+  *//**
    * Verify data is send when receiving response integer header without first
    * calling {@link HttpRequest#code()}
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void sendIntHeaderWithoutCode() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -3450,9 +3508,9 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("hello", body.get());
   }
 
-  /**
+  *//**
    * Verify custom connection factory
-   */
+   *//*
   @Test
   public void customConnectionFactory() throws Exception {
     handler = new RequestHandler() {
@@ -3479,9 +3537,9 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(200, code);
   }
 
-  /**
+  *//**
    * Verify setting a null connection factory restores to the default one
-   */
+   *//*
   @Test
   public void nullConnectionFactory() throws Exception {
     handler = new RequestHandler() {
@@ -3497,11 +3555,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(200, code);
   }
 
-  /**
+  *//**
    * Verify reading response body for empty 200
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void streamOfEmptyOkResponse() throws Exception {
     handler = new RequestHandler() {
@@ -3514,11 +3572,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", get(url).body());
   }
 
-  /**
+  *//**
    * Verify reading response body for empty 400
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void bodyOfEmptyErrorResponse() throws Exception {
     handler = new RequestHandler() {
@@ -3531,11 +3589,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("", get(url).body());
   }
 
-  /**
+  *//**
    * Verify reading response body for non-empty 400
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void bodyOfNonEmptyErrorResponse() throws Exception {
     handler = new RequestHandler() {
@@ -3553,11 +3611,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals("error", get(url).body());
   }
 
-  /**
+  *//**
    * Verify progress callback when sending a file
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void uploadProgressSend() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -3583,11 +3641,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(file.length(), tx.get());
   }
 
-  /**
+  *//**
    * Verify progress callback when sending from an InputStream
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void uploadProgressSendInputStream() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -3613,11 +3671,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(file.length(), tx.get());
   }
 
-  /**
+  *//**
    * Verify progress callback when sending from a byte array
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void uploadProgressSendByteArray() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -3642,11 +3700,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(bytes.length, tx.get());
   }
 
-  /**
+  *//**
    * Verify progress callback when sending from a Reader
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void uploadProgressSendReader() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -3672,11 +3730,11 @@ public class HttpRequestTest extends ServerTestCase {
     assertEquals(file.length(), tx.get());
   }
 
-  /**
+  *//**
    * Verify progress callback doesn't cause an exception when it's null
    *
    * @throws Exception
-   */
+   *//*
   @Test
   public void nullUploadProgress() throws Exception {
     final AtomicReference<String> body = new AtomicReference<String>();
@@ -3693,5 +3751,5 @@ public class HttpRequestTest extends ServerTestCase {
     int code = post(url).progress(null).send(file).code();
     assertEquals(HTTP_OK, code);
     assertEquals("hello", body.get());
-  }
+  }*/
 }
